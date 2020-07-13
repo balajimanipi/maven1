@@ -1,0 +1,101 @@
+pipeline
+{
+	agent any
+	stages
+
+	{
+		stage("Continouse Download")
+		{
+			steps
+			{
+				script
+					{
+						try
+						{
+							git 'https://github.com/balajimanipi/maven1.git'
+						}
+						catch(Exception e)
+						{
+							mail bcc: '', body: 'Jenkins is unable to download from git hub.', cc: '', from: '', replyTo: '', subject: 'Jenkins Job Failed', to: 'm.reddy@zensar.com'
+							exit(1)
+						}
+					}
+			}
+		}	
+		
+	stage("Continouse Build")
+		{
+			steps
+			{
+				script
+					{
+						try
+						{
+							sh label: '', script: 'mvn package'
+						}
+						catch(Exception e)
+						{
+							mail bcc: '', body: 'Jenkins is unable to crate an artifact', cc: '', from: '', replyTo: '', subject: 'Jenkins Job Failed', to: 'm.reddy@zensar.com'
+							exit(1)
+						}
+					}
+			}
+		}
+		stage("Continouse Deployment")
+		{
+			steps
+			{
+				script
+					{
+						try
+						{
+							sh label: '', script: 'scp /var/lib/jenkins/workspace/Scripted_Pipeline/webapp/target/webapp.war root@172.31.38.180:/var/lib/tomcat8/webapps/testenv.war'
+						}
+						catch(Exception e)
+						{
+							mail bcc: '', body: 'Jenkins is unable to deploy into tomcat on QA Server', cc: '', from: '', replyTo: '', subject: 'Jenkins Job Failed', to: 'm.reddy@zensar.com'
+							exit(1)
+						}
+					}
+			}
+		}
+			stage("Continouse Testing")
+		{
+			steps
+			{
+				script
+					{
+						try
+						{
+						  git 'https://github.com/balajimanipi/FunctionlTesting.git'
+     					  sh label: '', script: 'java -jar /var/lib/jenkins/workspace/Scripted_Pipeline/testing.jar'
+						}
+						catch(Exception e)
+						{
+							mail bcc: '', body: 'Jenkins is unableTest the code in Testing', cc: '', from: '', replyTo: '', subject: 'Jenkins Job Failed', to: 'm.reddy@zensar.com'
+							exit(1)
+						}
+					}
+			}
+		}	
+	stage("Continouse Deployment")
+		{
+			steps
+			{
+				script
+					{
+						try
+						{
+							sh label: '', script: 'scp /var/lib/jenkins/workspace/Scripted_Pipeline/webapp/target/webapp.war root@172.31.46.74:/var/lib/tomcat8/webapps/prodenv.war'estenv.war'
+						}
+						catch(Exception e)
+						{
+							mail bcc: '', body: 'Jenkins is unable to deploy into tomcat on Prod Server', cc: '', from: '', replyTo: '', subject: 'Jenkins Job Failed', to: 'm.reddy@zensar.com'
+							exit(1)
+						}
+					}
+			}
+		}
+
+	}
+}
