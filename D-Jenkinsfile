@@ -36,6 +36,7 @@ pipeline
      					  sh label: '', script: 'java -jar /var/lib/jenkins/workspace/Scripted_Pipeline/testing.jar'
 				}
 		}
+		}
 post
 {
 	sucess
@@ -52,4 +53,3 @@ post
 					
 }
 
-}
