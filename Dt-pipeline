@@ -86,7 +86,7 @@ pipeline
 					{
 						try
 						{
-							sh label: '', script: 'scp /var/lib/jenkins/workspace/Scripted_Pipeline/webapp/target/webapp.war root@172.31.46.74:/var/lib/tomcat8/webapps/prodenv.war'estenv.war'
+							sh label: '', script: 'scp /var/lib/jenkins/workspace/Scripted_Pipeline/webapp/target/webapp.war root@172.31.46.74:/var/lib/tomcat8/webapps/prodenv.war'
 						}
 						catch(Exception e)
 						{
